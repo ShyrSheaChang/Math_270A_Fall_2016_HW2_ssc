@@ -68,6 +68,13 @@ void ConvertBinaryToDat(){
 int main()
 {
   //EnergyTest();
+
+	/* This code changes the boundary conditions to a Dirichlet BC at x=0 and an 
+	inward force boundary at x=1. Also it outputs a csv file for Windows system to read.*/
+
+	std::ofstream write_xn;
+	write_xn.open("xn.txt");
+
   ElasticitySimulation();
   ConvertBinaryToDat();
 }

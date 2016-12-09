@@ -216,7 +216,18 @@ public:
       be_matrix.SetToZero();
       for(int i=0;i<N;i++) be_matrix(i,i)=mass(i);
       lf->AddForceDerivative(be_matrix,x_np1,-dt*dt);
+
+	  be_matrix(0, 1) = 0;
+	  be_matrix(1, 0) = 0;
+	  be_matrix(0, 0) = 1;
+	  residual[0] = 0;
+	  residual[N - 1] -= dt*dt;
+
+	  //std::cout << dt*dt / mass(N - 1) << "\n";
+	  //system("pause");
+
       be_matrix.QRSolve(delta,residual);
+
       x_np1+=delta;
     }
     Exit_BE();
@@ -241,6 +252,18 @@ public:
     FILE_IO::Write_Binary(output_directory,positions_filename,x_n);
     std::string velocities_filename(std::string("particle_v_")+frame_name);
     FILE_IO::Write_Binary(output_directory,velocities_filename,v_n);
+    
+	std::ofstream write_xn;
+	
+	write_xn.open("xn.txt", std::ios::app);
+	for (int i = 0; i < x_n.size(); i++) {
+		if(i<x_n.size()-1) write_xn << x_n[i] << ",";
+		else write_xn << x_n[i];
+	}
+	write_xn << "\n";
+
+  
+  
   }
 
   void Read_State(const int number){
